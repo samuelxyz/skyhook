@@ -63,6 +63,12 @@ class Body:
         if state is None:
             state = self.state
         return self.rotated_nodes(state) + state[:2]
+
+    def node_vels_world(self, state=None):
+        '''Returns an array of 2D velocity vectors (in the world frame), Nx2'''
+        if state is None:
+            state = self.state
+        return np.cross(self.rotated_nodes(state), np.asarray((0, 0, state[5])))[:, :2] + state[3:5]
     
     def rk4_step(self, stepsize):
         v1 = self.vel3 + stepsize/2 * self.acc3
